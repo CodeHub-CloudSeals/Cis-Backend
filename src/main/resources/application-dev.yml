@@ -1,0 +1,41 @@
+server:
+  port: 9091
+
+ # Change this for different environments
+---
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  config:
+    activate:
+      secret: a-string-secret-at-least-256-bits-long
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://172.20.96.5:3306/MVPCLOUDSEALS
+    username: gopi
+    password: Gmail@123
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: gopikrishna.a@cloudseals.com
+    password: Sg@2511k
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: local  # Change this for different environments
+---
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  config:
+    activate:
+      secret: a-string-secret-at-least-256-bits-long
+      on-profile: local
+  datasource:
+    url: jdbc:mysql://google/MVPCLOUDSEALS22?
+         cloudSqlInstance=observability-459214:us-central1:cseals-mysqldb
+         &socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
+    username: gopi
+    password: Gmail@123
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: aravakrishna2511@gmail.com
+    password: Sp@krishna25
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+---
+spring:
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:mysql://172.20.96.5:3306/MVPCLOUDSEALS
+    username: gopi
+    password: Gmail@123
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+
+
