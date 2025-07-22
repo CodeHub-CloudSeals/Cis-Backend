@@ -1,3 +1,4 @@
+/*
 package com.spring.implementation.dto;
 
 public class UserRegistrationDto {
@@ -11,3 +12,4 @@ public class UserRegistrationDto {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 }
+*/

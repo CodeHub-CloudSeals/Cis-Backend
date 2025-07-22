@@ -14,7 +14,7 @@ spring:
       secret: a-string-secret-at-least-256-bits-long
       on-profile: local
   datasource:
-    url: jdbc:mysql://google/MVPCLOUDSEALS22?
+    url: jdbc:mysql://google/MVPCLOUDSEALS?
          cloudSqlInstance=observability-459214:us-central1:cseals-mysqldb
          &socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
     username: gopi
@@ -23,7 +23,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: aravakrishna2511@gmail.com
-    password: Sp@krishna25
+    password: zpfd rksj wnij gjst
     properties:
       mail:
         smtp:

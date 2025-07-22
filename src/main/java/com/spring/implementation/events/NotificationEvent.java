@@ -4,4 +4,6 @@ public interface NotificationEvent {
     String getEmail();
     String getSubject();
     String getBody();
+    Integer getId();
+    String getName();
 }

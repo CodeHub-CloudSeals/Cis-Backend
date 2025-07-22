@@ -47,10 +47,10 @@ public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Transactional
-    @Async("emailExecutor")
-    @EventListener
     public Users register(Users user) {
 
+        Organizations organization = null;
+        Users usr=null;
         /*Organizations org = organizationRepository.findById(
                         user.getOrganizations().getId().longValue())
                 .orElseThrow(() -> new ResourceNotFoundException("OrganizationId", "id", user.getOrganizations().getId().longValue()));*/
@@ -66,9 +66,22 @@ public class UserService {
         } while (repo.existsById(randomId)); // ensure uniqueness
 
         //user.setOrganizations(org);
-        repo.save(user);
-        publisher.publish(new UserRegisteredEvent(user.getEmail(), user.getUsername()));
-        log.info("service register user:{}", user);
+
+        try {
+
+            if(user.getOrganizations().getId()!=null){
+                usr =repo.save(user);
+            }else{
+                organization=organizationRepository.save(user.getOrganizations());
+            }
+
+
+            publisher.publish(new UserRegisteredEvent(user.getEmail(), user.getUsername(),usr.getId()));
+            log.info("service register user:{}", user);
+
+        }catch ( ResourceNotFoundException  | DuplicateResourceException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
         return user;
     }
 

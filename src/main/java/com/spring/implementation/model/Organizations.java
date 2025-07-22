@@ -27,6 +27,26 @@ public class Organizations {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "company_name")
+    private String companyName;
+
+
+    @Column(name = "company_address")
+    private String companyAddress;
+
+
+    @Column(name = "country")
+    private String country;
+
+
+    @Column(name = "state")
+    private String state;
+
+
+    @Column(name = "zip_code")
+    private String zipCode;
+
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

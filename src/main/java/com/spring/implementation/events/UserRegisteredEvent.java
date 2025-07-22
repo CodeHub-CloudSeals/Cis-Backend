@@ -1,19 +1,31 @@
 package com.spring.implementation.events;
 
-import org.springframework.context.ApplicationEvent;
+
 
 public class UserRegisteredEvent implements NotificationEvent  {
     private final String email;
     private final String name;
+    private final Integer id;
 
-    public UserRegisteredEvent(String email, String name) {
+    public UserRegisteredEvent(String email, String name,Integer id) {
         this.email = email;
         this.name  = name;
+        this.id=id;
     }
 
     @Override
     public String getEmail() {
         return email;
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
