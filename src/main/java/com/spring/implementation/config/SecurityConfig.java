@@ -37,8 +37,9 @@ public class SecurityConfig {
                 authorizeHttpRequests(request -> request
                         .requestMatchers("/cloudseal/v1/api/login",
                                 "/cloudseal/v1/api/register"
-                                , "/cloudseal/v1/api/organizations/*"
-                        ,"/cloudseal/v1/api/user/*")
+                                , "/cloudseal/v1/api/organizations",
+                                "/cloudseal/v1/api/organizations/*"
+                        ,"/cloudseal/v1/api/user/status")
                         .permitAll()
                        .anyRequest().authenticated())
                             .httpBasic(Customizer.withDefaults()).

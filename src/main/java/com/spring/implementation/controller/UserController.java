@@ -53,6 +53,18 @@ public class UserController {
         return service.loadUserById(id);
     }
 
+    @PutMapping("/user/status")
+    public ResponseEntity<Users> updateUserStatus(
+            @RequestParam("userId") Integer userId,
+            @RequestParam("status") String status) {
+
+        log.info("Received request to update status of user {} to {}", userId, status);
+        Users updatedUser = service.updateUserStatus(userId, status);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
+
     @DeleteMapping("/user/{id}")
     public ResponseEntity<Users> deleteByUser(@PathVariable Integer id) {
         log.info("get user: {}", id);

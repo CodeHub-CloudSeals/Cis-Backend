@@ -68,21 +68,7 @@ class UserServiceTest {
      //   when(repo.existsById(anyInt())).thenReturn(false); // simplify unique ID check
     }
 
-   /* @Test
-    void testRegister_Success() {
-        Users inputUser = mockUser();
-        inputUser.setOrganizations(mockOrg());
 
-       // when(organizationRepository.findById(101L)).thenReturn(Optional.of(mockOrg()));
-        when(repo.save(any(Users.class))).thenAnswer(inv -> inv.getArgument(0));
-
-        Users result = service.register(inputUser);
-
-        assertNotNull(result);
-        assertEquals("gopi.dev", result.getUsername());
-      //  assertTrue(result.getId() >= 0 && result.getId() < 999999);
-        verify(repo).save(any(Users.class));
-    }*/
     @Test
     void testLoadUserById_Found() {
         Users user = mockUser();

@@ -47,6 +47,8 @@ public class Organizations {
     private String zipCode;
 
 
+
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();

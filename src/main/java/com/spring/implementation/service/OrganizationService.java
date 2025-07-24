@@ -20,7 +20,7 @@ public class OrganizationService {
         return organizationRepository.findAll();
     }
 
-    public Optional<Organizations> getOrganizationById(Long id) {
+    public Optional<Organizations> getOrganizationById(Integer id) {
         return organizationRepository.findById(id);
     }
 
@@ -29,7 +29,7 @@ public class OrganizationService {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrg);
     }
 
-    public ResponseEntity<Organizations> updateOrganization(Long id, Organizations newOrgData) {
+    public ResponseEntity<Organizations> updateOrganization(Integer id, Organizations newOrgData) {
         Optional<Organizations> existingOrg = organizationRepository.findById(id);
         if (existingOrg.isPresent()) {
             Organizations org = existingOrg.get();
@@ -46,7 +46,7 @@ public class OrganizationService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<String> deleteOrganization(Long id) {
+    public ResponseEntity<String> deleteOrganization(Integer id) {
         if (organizationRepository.existsById(id)) {
             organizationRepository.deleteById(id);
             return ResponseEntity.ok("Organization deleted successfully.");
