@@ -3,9 +3,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import org.hibernate.engine.internal.Cascade;
 
 
-
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 
@@ -23,7 +24,7 @@ public class Users {
     private Integer id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id", nullable = false)
+    @JoinColumn(name = "organization_id")
     @com.fasterxml.jackson.annotation.JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Organizations organizations;
 
@@ -44,6 +45,9 @@ public class Users {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @Column(name = "phone")
+    private BigInteger phone;
 
     @PrePersist
     protected void onCreate() {

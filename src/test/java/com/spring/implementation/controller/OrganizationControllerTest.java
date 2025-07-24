@@ -32,8 +32,10 @@ class OrganizationControllerTest {
 
     @Test
     void testGetAllOrganizations() {
-        List<Organizations> mockList = List.of(new Organizations(1, "AlphaCorp","service", LocalDateTime.now()),
-                new Organizations(2, "BetaInc","service", LocalDateTime.now()));
+        List<Organizations> mockList = List.of(new Organizations(1, "AlphaCorp","service",
+                        LocalDateTime.now(),"abc","india","hyd","",""),
+                new Organizations(2, "BetaInc","service", LocalDateTime.now(),
+                        "abc","india","hyd","",""));
         when(organizationService.getAllOrganizations()).thenReturn(mockList);
 
         ResponseEntity<List<Organizations>> response = organizationController.getAllOrganizations();
@@ -44,10 +46,11 @@ class OrganizationControllerTest {
 
     @Test
     void testGetOrganizationById_Found() {
-        Organizations org = new Organizations(2, "AlphaCorp","service", LocalDateTime.now());
-        when(organizationService.getOrganizationById(1L)).thenReturn(Optional.of(org));
+        Organizations org = new Organizations(2, "AlphaCorp","service", LocalDateTime.now(),
+                "abc","india","hyd","","");
+        when(organizationService.getOrganizationById(1)).thenReturn(Optional.of(org));
 
-        ResponseEntity<Organizations> response = organizationController.getOrganizationById(1L);
+        ResponseEntity<Organizations> response = organizationController.getOrganizationById(1);
 
         assertTrue(response.getStatusCode().is2xxSuccessful());
         assertEquals("AlphaCorp", response.getBody().getName());
@@ -55,9 +58,9 @@ class OrganizationControllerTest {
 
     @Test
     void testGetOrganizationById_NotFound() {
-        when(organizationService.getOrganizationById(99l)).thenReturn(Optional.empty());
+        when(organizationService.getOrganizationById(99)).thenReturn(Optional.empty());
 
-        ResponseEntity<Organizations> response = organizationController.getOrganizationById(99L);
+        ResponseEntity<Organizations> response = organizationController.getOrganizationById(99);
 
         assertEquals(404, response.getStatusCodeValue());
         assertNull(response.getBody());
@@ -65,8 +68,10 @@ class OrganizationControllerTest {
 
     @Test
     void testCreateOrganization() {
-        Organizations org = new Organizations(null, "BetaInc","service", LocalDateTime.now());
-        Organizations savedOrg = new Organizations(2, "BetaInc","service", LocalDateTime.now());
+        Organizations org = new Organizations(null, "BetaInc","service", LocalDateTime.now(),
+                "abc","india","hyd","","");
+        Organizations savedOrg = new Organizations(2, "BetaInc","service", LocalDateTime.now(),
+                "abc","india","hyd","","");
 
         when(organizationService.createOrganization(org)).thenReturn(ResponseEntity.ok(savedOrg));
 
@@ -78,21 +83,21 @@ class OrganizationControllerTest {
 
     @Test
     void testUpdateOrganization() {
-        Organizations updatedOrg = new Organizations(2, "UpdatedCorp","service", LocalDateTime.now());
+        Organizations updatedOrg = new Organizations(2, "UpdatedCorp","service", LocalDateTime.now(),"abc","india","hyd","","");
 
-        when(organizationService.updateOrganization(eq(2l), any(Organizations.class)))
+        when(organizationService.updateOrganization(eq(2), any(Organizations.class)))
             .thenReturn(ResponseEntity.ok(updatedOrg));
 
-        ResponseEntity<Organizations> response = organizationController.updateOrganization(2L, updatedOrg);
+        ResponseEntity<Organizations> response = organizationController.updateOrganization(2, updatedOrg);
 
         assertEquals("UpdatedCorp", response.getBody().getName());
     }
 
     @Test
     void testDeleteOrganization() {
-        when(organizationService.deleteOrganization(1L)).thenReturn(ResponseEntity.ok("Deleted"));
+        when(organizationService.deleteOrganization(1)).thenReturn(ResponseEntity.ok("Deleted"));
 
-        ResponseEntity<String> response = organizationController.deleteOrganization(1L);
+        ResponseEntity<String> response = organizationController.deleteOrganization(1);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("Deleted", response.getBody());

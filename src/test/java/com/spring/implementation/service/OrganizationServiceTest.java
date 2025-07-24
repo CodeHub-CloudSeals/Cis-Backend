@@ -54,9 +54,9 @@ class OrganizationServiceTest {
     void testGetOrganizationById_Found() {
         Organizations org = buildOrg(1, "SecureCorp");
 
-        when(organizationRepository.findById(1L)).thenReturn(Optional.of(org));
+        when(organizationRepository.findById(1)).thenReturn(Optional.of(org));
 
-        Optional<Organizations> result = service.getOrganizationById(1L);
+        Optional<Organizations> result = service.getOrganizationById(1);
 
         assertTrue(result.isPresent());
         assertEquals("SecureCorp", result.get().getName());
@@ -64,9 +64,9 @@ class OrganizationServiceTest {
 
     @Test
     void testGetOrganizationById_NotFound() {
-        when(organizationRepository.findById(99L)).thenReturn(Optional.empty());
+        when(organizationRepository.findById(99)).thenReturn(Optional.empty());
 
-        Optional<Organizations> result = service.getOrganizationById(99L);
+        Optional<Organizations> result = service.getOrganizationById(99);
 
         assertFalse(result.isPresent());
     }
@@ -89,10 +89,10 @@ class OrganizationServiceTest {
         Organizations existing = buildOrg(7, "LegacyCorp");
         Organizations updated = buildOrg(null, "NextGenCorp");
 
-        when(organizationRepository.findById(7L)).thenReturn(Optional.of(existing));
+        when(organizationRepository.findById(7)).thenReturn(Optional.of(existing));
         when(organizationRepository.save(any(Organizations.class))).thenReturn(existing);
 
-        ResponseEntity<Organizations> response = service.updateOrganization(7L, updated);
+        ResponseEntity<Organizations> response = service.updateOrganization(7, updated);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("NextGenCorp", response.getBody().getName());
@@ -102,9 +102,9 @@ class OrganizationServiceTest {
     void testUpdateOrganization_NotFound() {
         Organizations updated = buildOrg(null, "GhostCorp");
 
-        when(organizationRepository.findById(100L)).thenReturn(Optional.empty());
+        when(organizationRepository.findById(100)).thenReturn(Optional.empty());
 
-        ResponseEntity<Organizations> response = service.updateOrganization(100L, updated);
+        ResponseEntity<Organizations> response = service.updateOrganization(100, updated);
 
         assertEquals(404, response.getStatusCodeValue());
         assertNull(response.getBody());
@@ -112,10 +112,10 @@ class OrganizationServiceTest {
 
     @Test
     void testDeleteOrganization_Found() {
-        when(organizationRepository.existsById(3L)).thenReturn(true);
-        doNothing().when(organizationRepository).deleteById(3L);
+        when(organizationRepository.existsById(3)).thenReturn(true);
+        doNothing().when(organizationRepository).deleteById(3);
 
-        ResponseEntity<String> response = service.deleteOrganization(3L);
+        ResponseEntity<String> response = service.deleteOrganization(3);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals("Organization deleted successfully.", response.getBody());
@@ -123,9 +123,9 @@ class OrganizationServiceTest {
 
     @Test
     void testDeleteOrganization_NotFound() {
-        when(organizationRepository.existsById(42L)).thenReturn(false);
+        when(organizationRepository.existsById(42)).thenReturn(false);
 
-        ResponseEntity<String> response = service.deleteOrganization(42L);
+        ResponseEntity<String> response = service.deleteOrganization(42);
 
         assertEquals(404, response.getStatusCodeValue());
         assertEquals("Organization not found.", response.getBody());

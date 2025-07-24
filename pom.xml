@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.spring.implementation</groupId>
 	<artifactId>cloudseals</artifactId>
-	<version>0.2.12-SNAPSHOT</version>
+	<version>0.2.13-SNAPSHOT</version>
 	<!--<name>RestApi</name>-->
 	<description>CloudSeals Spring Boot AI</description>
 	<properties>
@@ -21,6 +21,8 @@
 			**/config/**,
 			**/repository/**,
 			**/exception/**,
+			**/component/**,
+			**/events/**,
 			**/com.spring.implementation.CloudSealsApplication.java
 		</sonar.coverage.exclusions>
 	</properties>
@@ -90,6 +92,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>3.5.3</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
@@ -200,6 +203,8 @@
 								<exclude>**/config/**</exclude>
 								<exclude>**/repository/**</exclude>
 								<exclude>**/exception/**</exclude>
+								<exclude>**/component/**</exclude>
+								<exclude>**/events/**</exclude>
 								<exclude>**/com.spring.implementation.CloudSealsApplication.java</exclude>
 							</excludes>
 

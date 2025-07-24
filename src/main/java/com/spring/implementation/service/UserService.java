@@ -38,7 +38,7 @@ public class UserService {
 
     private final JWTService jwtService;
     private final AuthenticationManager authManager;
-    private final UserRepo repo;
+    private final UserRepo userRepo;
     private final OrganizationRepository organizationRepository;
     private final Random random = new Random();
     private final EventPublisherService publisher;
@@ -47,15 +47,15 @@ public class UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Transactional
-    @Async("emailExecutor")
-    @EventListener
     public Users register(Users user) {
 
+        Organizations organization = null;
+        Users usr=null;
         /*Organizations org = organizationRepository.findById(
                         user.getOrganizations().getId().longValue())
                 .orElseThrow(() -> new ResourceNotFoundException("OrganizationId", "id", user.getOrganizations().getId().longValue()));*/
 
-        if (repo.findByUsername(user.getUsername()) != null) {
+        if (userRepo.findByUsername(user.getUsername()) != null) {
             throw new DuplicateResourceException("User", "Duplicate username", user.getUsername());
         }
 
@@ -63,13 +63,22 @@ public class UserService {
         user.setPassword(encoder.encode(user.getPassword()));
         do {
             randomId = random.nextInt(999999); // example: random int between 0 and 999999
-        } while (repo.existsById(randomId)); // ensure uniqueness
+        } while (userRepo.existsById(randomId)); // ensure uniqueness
 
         //user.setOrganizations(org);
-        repo.save(user);
-        publisher.publish(new UserRegisteredEvent(user.getEmail(), user.getUsername()));
-        log.info("service register user:{}", user);
-        return user;
+
+            if(user.getOrganizations().getId()==null){
+                organization=organizationRepository.save(user.getOrganizations());
+                user.getOrganizations().setId(organization.getId());
+            }
+
+        usr =userRepo.save(user);
+
+            publisher.publish(new UserRegisteredEvent(user.getEmail(), user.getUsername(),usr.getId()));
+            log.info("service register user:{}", user);
+
+
+        return usr;
     }
 
     public String verify(Users user) {
@@ -83,13 +92,29 @@ public class UserService {
         }
     }
 
+    public Users updateUserStatus(Integer userId, String status) {
+        // Fetch user by ID
+        Users user = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+
+        // Update status
+        user.setStatus(status);
+
+        // Save updated user
+        Users updatedUser = userRepo.save(user);
+        log.info("Updated status for user {}: {}", userId, status);
+
+        return updatedUser;
+    }
+
+
     public ResponseEntity<Users> loadUserById(Integer id) throws UsernameNotFoundException {
-        return ResponseEntity.ok(repo.findById(id)
+        return ResponseEntity.ok(userRepo.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id)));
     }
 
     public void deleteById(Integer id) throws UsernameNotFoundException {
-          repo.deleteById(id);
+        userRepo.deleteById(id);
     }
 
 

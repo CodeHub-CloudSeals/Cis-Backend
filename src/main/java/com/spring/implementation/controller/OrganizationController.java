@@ -27,7 +27,7 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Organizations> getOrganizationById(@PathVariable Long id) {
+    public ResponseEntity<Organizations> getOrganizationById(@PathVariable Integer id) {
         log.info("getOrganizationById : {}", id);
         return organizationService.getOrganizationById(id)
                 .map(ResponseEntity::ok)
@@ -52,13 +52,13 @@ public class OrganizationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Organizations> updateOrganization(@PathVariable Long id, @RequestBody Organizations organization) {
+    public ResponseEntity<Organizations> updateOrganization(@PathVariable Integer id, @RequestBody Organizations organization) {
         log.info("updateOrganization : {}", organization);
         return organizationService.updateOrganization(id, organization);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrganization(@PathVariable Long id) {
+    public ResponseEntity<String> deleteOrganization(@PathVariable Integer id) {
         log.info("deleteOrganization : {}", id);
         return organizationService.deleteOrganization(id);
     }
