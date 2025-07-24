@@ -1,9 +1,6 @@
 server:
   port: 9091
 
-spring:
-  profiles:
-    active: qa  # Change this for different environments
 ---
 spring:
   jackson:

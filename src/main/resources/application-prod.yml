@@ -1,9 +1,7 @@
 server:
   port: 9091
 
-spring:
-  profiles:
-    active: prod  # Change this for different environments
+  # Change this for different environments
 ---
 spring:
   jackson:
