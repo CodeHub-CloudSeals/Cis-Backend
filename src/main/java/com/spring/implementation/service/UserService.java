@@ -4,32 +4,27 @@ import com.spring.implementation.events.EventPublisherService;
 import com.spring.implementation.events.UserRegisteredEvent;
 import com.spring.implementation.exception.DuplicateResourceException;
 import com.spring.implementation.exception.ResourceNotFoundException;
-import com.spring.implementation.model.ErrorResponse;
+
 import com.spring.implementation.model.Organizations;
-import com.spring.implementation.model.UserPrincipal;
+
 import com.spring.implementation.model.Users;
 import com.spring.implementation.repository.OrganizationRepository;
 import com.spring.implementation.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
-import java.util.Optional;
+
 import java.util.Random;
-import java.util.UUID;
+
 
 @Slf4j
 @RequiredArgsConstructor

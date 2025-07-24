@@ -1,5 +1,8 @@
 package com.spring.implementation.service;
 
+import com.spring.implementation.events.EventPublisherService;
+import com.spring.implementation.exception.DuplicateResourceException;
+import com.spring.implementation.exception.ResourceNotFoundException;
 import com.spring.implementation.model.Organizations;
 import com.spring.implementation.model.Users;
 import com.spring.implementation.repository.OrganizationRepository;
@@ -7,7 +10,7 @@ import com.spring.implementation.repository.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import com.spring.implementation.events.UserRegisteredEvent;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -34,13 +37,18 @@ class UserServiceTest {
     private AuthenticationManager authManager;
 
     @Mock
-    private UserRepo repo;
+    private UserRepo userRepo;
+
 
     @Mock
     private OrganizationRepository organizationRepository;
 
     @Mock
     private Authentication authentication;
+
+    @Mock
+    private EventPublisherService publisher;
+
 
     @InjectMocks
     private UserService service;
@@ -63,17 +71,55 @@ class UserServiceTest {
                 .build();
     }
 
-    @BeforeEach
-    void clearRandomIds() {
-     //   when(repo.existsById(anyInt())).thenReturn(false); // simplify unique ID check
+    private Users buildUser() {
+        Organizations org = Organizations.builder()
+                .name("Cloud Seals HQ")
+                .domain("cloudseals.com")
+                .build();
+
+        return Users.builder()
+                .username("mahesh")
+                .email("mahesh@cloudseals.com")
+                .password("mahesh@123")
+                .role("admin")
+                .organizations(org)
+                .build();
     }
 
+
+    @BeforeEach
+    void clearRandomIds() {
+        //   when(repo.existsById(anyInt())).thenReturn(false); // simplify unique ID check
+    }
+
+    @Test
+    void shouldRegisterUserSuccessfully() {
+        Users inputUser = buildUser();
+        inputUser.setId(null);
+        Organizations savedOrg = Organizations.builder().id(1).name("Cloud Seals HQ").domain("cloudseals.com").build();
+
+        when(userRepo.findByUsername("mahesh")).thenReturn(null);
+        when(userRepo.existsById(anyInt())).thenReturn(false);
+        when(organizationRepository.save(any())).thenReturn(savedOrg);
+        when(userRepo.save(any())).thenAnswer(invocation -> {
+            Users user = invocation.getArgument(0);
+            user.setId(1001); // simulate DB-assigned ID
+            return user;
+        });
+
+        Users result = service.register(inputUser);
+
+        assertNotNull(result);
+        assertEquals("mahesh", result.getUsername());
+        assertEquals(1001, result.getId());
+        verify(publisher).publish(any(UserRegisteredEvent.class));
+    }
 
     @Test
     void testLoadUserById_Found() {
         Users user = mockUser();
         user.setId(2);
-        lenient().when(repo.existsById(anyInt())).thenReturn(false);
+        lenient().when(userRepo.existsById(anyInt())).thenReturn(false);
         RuntimeException ex = assertThrows(RuntimeException.class, () -> service.loadUserById(2));
         assertEquals("User not found with id: 2", ex.getMessage());
     }
@@ -99,6 +145,16 @@ class UserServiceTest {
         verify(authManager).authenticate(any());
         verify(jwtService).generateToken("gopi.dev");
     }
+
+    @Test
+    void shouldThrowExceptionForDuplicateUsername() {
+        Users inputUser = buildUser();
+        when(userRepo.findByUsername("mahesh")).thenReturn(inputUser);
+
+        assertThrows(DuplicateResourceException.class, () -> service.register(inputUser));
+        verify(userRepo, never()).save(any());
+    }
+
 
     @Test
     void verify_invalidCredentials_shouldReturnFail() {
@@ -127,7 +183,7 @@ class UserServiceTest {
                 .role("admin")
                 .build();
 
-        when(repo.findById(10)).thenReturn(Optional.of(mockUser));
+        when(userRepo.findById(10)).thenReturn(Optional.of(mockUser));
 
         ResponseEntity<Users> response = service.loadUserById(10);
 
@@ -136,8 +192,34 @@ class UserServiceTest {
     }
 
     @Test
+    void shouldUpdateUserStatusSuccessfully() {
+        Users existingUser = buildUser();
+
+        when(userRepo.findById(1001)).thenReturn(Optional.of(existingUser));
+        when(userRepo.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Users result = service.updateUserStatus(1001, "Inactive");
+
+        assertEquals("Inactive", result.getStatus());
+        verify(userRepo).findById(1001);
+        verify(userRepo).save(existingUser);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        when(userRepo.findById(9999)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> service.updateUserStatus(9999, "Inactive"));
+
+        verify(userRepo).findById(9999);
+        verify(userRepo, never()).save(any());
+    }
+
+
+    @Test
     void loadUserById_notFound_shouldThrowException() {
-        when(repo.findById(99)).thenReturn(Optional.empty());
+        when(userRepo.findById(99)).thenReturn(Optional.empty());
 
         UsernameNotFoundException ex = assertThrows(UsernameNotFoundException.class, () -> {
             service.loadUserById(99);
