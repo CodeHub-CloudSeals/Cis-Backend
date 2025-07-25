@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Operation;
+
 
 @Slf4j
 @RestController
@@ -18,6 +20,7 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @Operation(summary = "Register a new user", description = "Adds a user with organization details.")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Users user) {
         try {

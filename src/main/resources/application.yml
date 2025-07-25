@@ -1,5 +1,11 @@
 server:
   port: 8080
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    displayRequestDuration: true
 
 spring:
   profiles:
@@ -20,10 +26,10 @@ spring:
     username: gopi
     password: Gmail@123
   mail:
-    host: smtp.gmail.com
+    host: smtp.office365.com
     port: 587
-    username: aravakrishna2511@gmail.com
-    password: zpfd rksj wnij gjst
+    username: admin.mvp@cloudseals.com
+    password: vkzzccvtzdndxlwh
     properties:
       mail:
         smtp:
@@ -35,21 +41,7 @@ spring:
     hibernate:
       ddl-auto: none
 
----
-spring:
-  jackson:
-    serialization:
-      FAIL_ON_EMPTY_BEANS: false
-  config:
-    activate:
-      on-profile: prod
-  datasource:
-    url: jdbc:mysql://172.20.96.5:3306/MVPCLOUDSEALS
-    username: gopi
-    password: Gmail@123
-  jpa:
-    hibernate:
-      ddl-auto: none
+
 
 
 
