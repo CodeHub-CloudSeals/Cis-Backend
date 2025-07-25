@@ -16,10 +16,10 @@ spring:
     username: gopi
     password: Gmail@123
   mail:
-    host: smtp.gmail.com
+    host: smtp.office365.com
     port: 587
-    username: aravakrishna2511@gmail.com
-    password: zpfd rksj wnij gjst
+    username: admin.mvp@cloudseals.com
+    password: vkzzccvtzdndxlwh
     properties:
       mail:
         smtp:
