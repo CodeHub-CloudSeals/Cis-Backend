@@ -1,7 +1,12 @@
-server:
-  port: 9091
-
----
+springdoc:
+  api-docs:
+    path: /v3/api-docs       # where Springdoc exposes your spec
+  swagger-ui:
+    path: /swagger-ui   # or /swagger-ui/index.html
+    url: /v3/api-docs
+    operationsSorter: method
+    tagsSorter: alpha
+    displayRequestDuration: true
 spring:
   jackson:
     serialization:
