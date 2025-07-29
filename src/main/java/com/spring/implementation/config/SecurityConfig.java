@@ -39,7 +39,8 @@ public class SecurityConfig {
                                 "/cloudseal/v1/api/register"
                                 , "/cloudseal/v1/api/organizations",
                                 "/cloudseal/v1/api/organizations/*"
-                        ,"/cloudseal/v1/api/user/status")
+                        ,"/cloudseal/v1/api/user/status",
+                                "**/swagger-ui/index.html", "/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**")
                         .permitAll()
                        .anyRequest().authenticated())
                             .httpBasic(Customizer.withDefaults()).
