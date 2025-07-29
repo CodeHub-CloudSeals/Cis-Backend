@@ -21,7 +21,7 @@ public class RegistrationListener {
   public void onUserRegistered(UserRegisteredEvent event) {
     String subject = "Welcome, " + event.getSubject()+ "!";
 
-    String redirectUrl = "http://34.45.198.251:5173/activeUser?id="+ event.getId();
+    String redirectUrl = "http://34.47.236.22:3000/ActivateUser?userId="+ event.getId();
 
       String body = "Hi " + event.getName() + ",\n\n" +
               "Thank you for registering with Cloud seals.\n\n" +
