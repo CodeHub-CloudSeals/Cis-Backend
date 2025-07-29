@@ -2,7 +2,7 @@ springdoc:
   api-docs:
     path: /v3/api-docs       # where Springdoc exposes your spec
   swagger-ui:
-    path: /swagger-ui/index.html   # or /swagger-ui/index.html
+    path: /swagger-ui   # or /swagger-ui/index.html
     url: /v3/api-docs
     operationsSorter: method
     tagsSorter: alpha
