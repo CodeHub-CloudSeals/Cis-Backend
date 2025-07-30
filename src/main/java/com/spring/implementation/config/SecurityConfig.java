@@ -1,4 +1,5 @@
 package com.spring.implementation.config;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import java.util.List;
 
 @Configuration
@@ -39,11 +41,11 @@ public class SecurityConfig {
                                 "/cloudseal/v1/api/register"
                                 , "/cloudseal/v1/api/organizations",
                                 "/cloudseal/v1/api/organizations/*"
-                        ,"/cloudseal/v1/api/user/status",
-                                "**/swagger-ui/index.html", "/v3/api-docs/**","/swagger-ui.html","/swagger-ui/**")
+                                , "/cloudseal/v1/api/user/status",
+                                "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**")
                         .permitAll()
-                       .anyRequest().authenticated())
-                            .httpBasic(Customizer.withDefaults()).
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -53,7 +55,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:5173",
-                "http://34.47.236.22:5173","http://34.47.236.22:3000"));
+                "http://34.47.236.22:5173", "http://34.47.236.22:3000"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Content-Type", "Authorization"));
         config.setAllowCredentials(true);
